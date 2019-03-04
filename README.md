@@ -8,3 +8,18 @@ import nltk
 nltk.dowload()
 ```
 - 
+
+settings_md = """
+language: "en"
+pipeline:
+- name: "nlp_spacy"
+- name: "tokenizer_spacy"
+- name: "intent_entity_featurizer_regex"
+- name: "intent_featurizer_spacy"
+- name: "ner_crf"
+- name: "ner_spacy"
+- name: "ner_synonyms"
+- name: "intent_classifier_sklearn"
+"""
+
+%store settings_md > settings.md
