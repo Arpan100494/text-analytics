@@ -30,3 +30,21 @@ agent.train(
     )
 agent.persist(model_path)
 ```
+
+### Under `bot.py`
+```
+from rasa_core import utils
+from rasa_core.agent import Agent
+from rasa_core.interpreter import RasaNLUInterpreter
+from rasa_core.channels.console import ConsoleInputChannel
+
+
+from rasa_core import utils
+from rasa_core.agent import Agent
+from rasa_core.interpreter import RasaNLUInterpreter
+from rasa_core.channels.console import ConsoleInputChannel
+
+interpreter = RasaNLUInterpreter("models/default/current")
+agent = Agent.load("models/dialogue", interpreter=interpreter)
+agent.handle_channel(ConsoleInputChannel())
+```
