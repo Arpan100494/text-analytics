@@ -37,11 +37,12 @@ from rasa_core import utils
 from rasa_core.agent import Agent
 from rasa_core.interpreter import RasaNLUInterpreter, NaturalLanguageInterpreter
 import rasa_core
+from rasa_core import run
 
 interpreter = RasaNLUInterpreter("models/default/current")
 agent = Agent.load("models/dialogue", interpreter=interpreter)
 
-def run(dbug=False):
+def run_bot(dbug=False):
     if dbug:
         init_debug_logging()
     interpreter = NaturalLanguageInterpreter.create("models/default/current")
@@ -49,5 +50,5 @@ def run(dbug=False):
     action_endpoint = EndpointConfig(url="http://localhost:5056/webhook")
     agent = Agent.load("models/dialogue", interpreter=interpreter,action_endpoint=action_endpoint)
     rasa_core.run.serve_application(agent,channel='cmdline')
-run()
+run_bot()
 ```
