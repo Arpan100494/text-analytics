@@ -35,16 +35,19 @@ agent.persist(model_path)
 ```
 from rasa_core import utils
 from rasa_core.agent import Agent
-from rasa_core.interpreter import RasaNLUInterpreter
-from rasa_core.channels.console import ConsoleInputChannel
-
-
-from rasa_core import utils
-from rasa_core.agent import Agent
-from rasa_core.interpreter import RasaNLUInterpreter
-from rasa_core.channels.console import ConsoleInputChannel
+from rasa_core.interpreter import RasaNLUInterpreter, NaturalLanguageInterpreter
+import rasa_core
 
 interpreter = RasaNLUInterpreter("models/default/current")
 agent = Agent.load("models/dialogue", interpreter=interpreter)
-agent.handle_channel(ConsoleInputChannel())
+
+def run(dbug=False):
+    if dbug:
+        init_debug_logging()
+    interpreter = NaturalLanguageInterpreter.create("models/default/current")
+    from rasa_core.utils import EndpointConfig
+    action_endpoint = EndpointConfig(url="http://localhost:5056/webhook")
+    agent = Agent.load("models/dialogue", interpreter=interpreter,action_endpoint=action_endpoint)
+    rasa_core.run.serve_application(agent,channel='cmdline')
+run()
 ```
