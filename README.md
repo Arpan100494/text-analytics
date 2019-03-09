@@ -7,19 +7,26 @@
 import nltk
 nltk.dowload()
 ```
-- 
 
-settings_md = """
-language: "en"
-pipeline:
-- name: "nlp_spacy"
-- name: "tokenizer_spacy"
-- name: "intent_entity_featurizer_regex"
-- name: "intent_featurizer_spacy"
-- name: "ner_crf"
-- name: "ner_spacy"
-- name: "ner_synonyms"
-- name: "intent_classifier_sklearn"
-"""
+```
+from rasa_core import utils
+from rasa_core.agent import Agent
+from rasa_core.policies.keras_policy import KerasPolicy
+from rasa_core.policies.memoization import MemoizationPolicy
 
-%store settings_md > settings.md
+domain_file="domain.yml"
+model_path="models/dialogue"
+training_data_file="stories.md"    
+agent = Agent(
+    domain_file,
+    policies=[MemoizationPolicy(max_history=3), KerasPolicy()]
+    )
+training_data = agent.load_data(training_data_file)
+agent.train(
+    training_data,
+    epochs=400,
+    batch_size=100,
+    validation_split=0.2
+    )
+agent.persist(model_path)
+```
